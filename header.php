@@ -1,19 +1,36 @@
 <?php
-require_once 'vendor/autoload.php';
-use App\classes\Post;
-use App\classes\Site;
-$ob = Site::display();
-$siteData = mysqli_fetch_assoc($ob);
-#$post = Post::showActivelPost();
-$populer = Post::showPopulerlPost();
+require_once '../vendor/autoload.php';
+session_start();
+if(!isset($_SESSION['login-success'])){
+    header('location:login.php');
+}
 $page = explode('/',$_SERVER['PHP_SELF']);
 $page = end($page);
+use App\classes\Session;
+use App\classes\UserLogin;
+Use App\classes\Mail;
+$name = $_SESSION['username'];
+$userData = UserLogin::loginUserData("$name");
 $title = '';
 if($page == 'login.php'){
     $title = 'Home';
+}elseif($page == 'addcategory.php' || $page == 'managecategory.php'){
+    $title = 'Category';
 }
-elseif ($page == 'contact.php'){
-    $title = 'Contact';
+elseif($page == 'addpost.php' || $page == 'managepost.php'){
+    $title = 'Post';
+}
+elseif($page == 'adduser.php' || $page =='manageuser.php'){
+    $title = 'User';
+}
+elseif($page == 'inbox.php' || $page =='sentmail.php' || $page =='draft.php' || $page =='strash.php'){
+    $title = 'Mail';
+}
+elseif($page == 'logo.php' || $page =='social.php'){
+    $title = 'Site Identity';
+}
+else{
+    $title = 'Home';
 }
 ?>
 
@@ -21,101 +38,173 @@ elseif ($page == 'contact.php'){
 <html lang="en">
 
 <head>
-    <!-- Basic -->
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-    <!-- Mobile Metas -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Site Metas -->
-    <title><?= $title . ' | ' . $siteData['title']?></title>
-    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
-    <meta name="author" content="">
-
-
-    <!-- Design fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <meta name="author" content="Mosaddek">
+    <meta name="keyword" content="FlatLab, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <link rel="shortcut icon" href="img/favicon.html">
+    <!--  summernote -->
+    <link href="assets/summernote/dist/summernote.css" rel="stylesheet">
+    <title><?= $title . ' | '?>Admin Pannel</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="assets/css/bootstrap.css" rel="stylesheet">
-
-    <!-- FontAwesome Icons core CSS -->
-    <link href="assets/css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-reset.css" rel="stylesheet">
+    <!--external css-->
+    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="assets/jquery-easy-pie-chart/jquery.easy-pie-chart.css" rel="stylesheet" type="text/css"
+        media="screen" />
+    <link rel="stylesheet" href="css/owl.carousel.css" type="text/css">
+    <!--dynamic table-->
+    <link href="assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
+    <link href="assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/data-tables/DT_bootstrap.css" />
+    <!--right slidebar-->
+    <link href="css/slidebars.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="assets/style.css" rel="stylesheet">
 
-    <!-- Responsive styles for this template -->
-    <link href="assets/css/responsive.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/style-responsive.css" rel="stylesheet" />
 
-    <!-- Colors for this template -->
-    <link href="assets/css/colors.css" rel="stylesheet">
-
-    <!-- Version Tech CSS for this template -->
-    <link href="assets/css/version/tech.css" rel="stylesheet">
-
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
 </head>
 
 <body>
 
-    <div id="wrapper">
-        <header class="tech-header header">
-            <div class="container-fluid">
-                <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
-                    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-                        data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
-                        aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <a class="navbar-brand" href="index.php"></a>
-                    <div class="collapse navbar-collapse" id="navbarCollapse">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="index.php">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="contact.php">Contact Us </a>
-                            </li>
-
-                            <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Dancing+Script:wght@600&family=Lora:ital,wght@1,600&family=Roboto+Slab&display=swap" rel="stylesheet">
-
-
-                            <?php
-            $ob = new \App\classes\Site();
-            $a = $ob->display();
-            $siteData = mysqli_fetch_assoc($a);
-            $skip = 0;
-            $take = $siteData['postdisplay'];
-            $page = 1;
-         
-            $sql = "SELECT blog.*, categories.category_name FROM blog INNER JOIN categories ON blog.cat_id = categories.id ORDER BY id DESC LIMIT $skip,$take ";
-            $post = \App\classes\Post::pagination($sql);
-            while ($row = mysqli_fetch_assoc($post)){
-            }?>
-
-
-
-
+    <section id="container">
+        <!--header start-->
+        <header class="header white-bg">
+            <div class="sidebar-toggle-box">
+                <i class="fa fa-bars"></i>
+            </div>
+            <!--logo start-->
+            <a href="index.php" class="logo"><span> Dashboard</span></a>
+            <!--logo end-->
+            <div class="nav notify-row" id="top_menu">
+                <!--  notification start -->
+                <ul class="nav top-menu">
+                    <!-- settings start -->
+                    
+                    <!-- settings end -->
+                    <!-- inbox dropdown start-->
+                    
+                    <!-- inbox dropdown end -->
+                    <!-- notification dropdown start-->
+                    
+                    <!-- notification dropdown end -->
+                </ul>
+                <!--  notification end -->
+            </div>
+            <div class="top-nav ">
+                <!--search & user info start-->
+                <ul class="nav pull-right top-menu">
+                    <li>
+                        <input type="text" class="form-control search" placeholder="Search">
+                    </li>
+                    <!-- user login dropdown start-->
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <img alt="" src="../uploads/<?= $userData['image']?>" style="width: 35px">
+                            <span
+                                class="username"><?= isset($_SESSION['username']) ? $_SESSION['username'] : '' ;?></span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu extended logout dropdown-menu-right">
+                            <div class="log-arrow-up"></div>
+                            <li><a href="profile.php"><i class=" fa fa-suitcase"></i>Profile</a></li>
+                            <li><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
+                            <li><a href="#"><i class="fa fa-bell-o"></i> Notification</a></li>
+                            <li><a href="logout.php"><i class="fa fa-key"></i> Log Out</a></li>
                         </ul>
-                        <ul class="navbar-nav mr-2">
-                            <form class="form-inline" method="get">
-                                <input class="form-control mr-sm-2" type="search" placeholder="Search  "
-                                    aria-label="Search" name="search">
-                                <input type="submit" class="btn btn-outline-success my-2 my-sm-0" value="Search"
-                                    style="cursor: pointer;" name="search-btn">
-                            </form>
+                    </li>
+                    <li class="sb-toggle-right">
+                        <i class="fa  fa-align-right"></i>
+                    </li>
+                    <!-- user login dropdown end -->
+                </ul>
+                <!--search & user info end-->
+            </div>
+        </header>
+        <!--header end-->
+        <!--sidebar start-->
+        <aside>
+            <div id="sidebar" class="nav-collapse ">
+                <!-- sidebar menu start-->
+                <ul class="sidebar-menu" id="nav-accordion">
+                    <li>
+                        <a href="index.php" <?= $page == 'login.php' ? 'class="active"' : '' ?>>
+                            <i class="fa fa-dashboard"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="sub-menu">
+                        <a href="javascript:;" <?= $page == 'addcategory.php' ? 'class="active"' : '' ?>
+                            <?= $page == 'managecategory.php' ? 'class="active"' : '' ?>>
+                            <i class="fa fa-shield"></i>
+                            <span>Categories</span>
+                        </a>
+                        <ul class="sub">
+                            <li <?= $page == 'addcategory.php' ? 'class="active"' : '' ?>><a href="addcategory.php">Add
+                                    Category</a></li>
+                            <li <?= $page == 'managecategory.php' ? 'class="active"' : '' ?>><a
+                                    href="managecategory.php">Manage Category</a></li>
                         </ul>
-                    </div>
-                </nav>
-            </div><!-- end container-fluid -->
-        </header><!-- end market-header -->
-        <hr>
-        <section class="section">
-            <div class="container">
-                <div class="row">
+                    </li>
+                    <li class="sub-menu">
+                        <a href="javascript:;" <?= $page == 'addpost.php' ? 'class="active"' : '' ?>
+                            <?= $page == 'managepost.php' ? 'class="active"' : '' ?>>
+                            <i class="fa fa-thumb-tack"></i>
+                            <span>Posts</span>
+                        </a>
+                        <ul class="sub">
+                            <li <?= $page == 'addpost.php' ? 'class="active"' : '' ?>><a href="addpost.php">Add Post</a>
+                            </li>
+                            <li <?= $page == 'managepost.php' ? 'class="active"' : '' ?>><a href="managepost.php">Manage
+                                    Post</a></li>
+                        </ul>
+                    </li>
+                    <!-- adduser only admin -->
+                    <?php
+    if($userData['role'] == 1){ ?>
+                    <li class="sub-menu">
+                        <a href="javascript:;" <?= $page == 'adduser.php' ? 'class="active"' : '' ?>
+                            <?= $page == 'manageuser.php' ? 'class="active"' : '' ?>>
+                            <i class="fa fa-users"></i>
+                            <span>Users</span>
+                        </a>
+                        <ul class="sub">
+                            <li <?= $page == 'adduser.php' ? 'class="active"' : '' ?>><a href="adduser.php">Add User</a>
+                            </li>
+                            <li <?= $page == 'manageuser.php' ? 'class="active"' : '' ?>><a href="manageuser.php">Manage
+                                    Users</a></li>
+                        </ul>
+                    </li>
+                    <?php } ?>
+                    <li class="sub-menu">
+                        
+                        </a>
+                        <ul class="sub">
+                            <li <?= $page == 'inbox.php' ? 'class="active"' : '' ?>
+                                <?= $page == 'draft.php' ? 'class="active"' : '' ?>
+                                <?= $page == 'trash.php' ? 'class="active"' : '' ?><?= $page == 'sentmail.php' ? 'class="active"' : '' ?>>
+                                <a href="inbox.php">Manage Mail</a></li>
+                        </ul>
+                    </li>
+                    <li class="sub-menu">
+                        
+                        <ul class="sub">
+                            <li <?= $page == 'logo.php' ? 'class="active"' : '' ?>><a href="logo.php">Logo & Footer</a>
+                            </li>
+                            <li <?= $page == 'social.php' ? 'class="active"' : '' ?>><a href="social.php">Social
+                                    Media</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <!-- sidebar menu end-->
+            </div>
+        </aside>
+        <!--sidebar end-->
+        <!--main content start-->
+        <section id="main-content">
+            <section class="wrapper">

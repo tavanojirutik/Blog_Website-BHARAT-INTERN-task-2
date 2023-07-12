@@ -1,78 +1,85 @@
-</div><!-- end row -->
-</div><!-- end container -->
+</section>
 </section>
 
-<?php
-use App\classes\Site;
-$ob = Site::displaySocialLink();
-$data = mysqli_fetch_assoc($ob);
-?>
-<footer class="footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-7">
-                <div class="widget">
-                    <div class="footer-text text-left">
-                        <a href="index.html"><img src="images/version/tech-footer-logo.png" alt="" class="img-fluid"></a>
-                        <p>This site is a technology blog , we sharing marketing, news and gadget articles.</p>
-                        <div class="social">
-                            
-                            <a href="<?= $data['github']?>" data-toggle="tooltip" data-placement="bottom" title="Github"><i class="fa fa-github"></i></a>
-                            <a href="<?= $data['linkedin']?>" data-toggle="tooltip" data-placement="bottom" title="Linkedin"><i class="fa fa-linkedin"></i></a>
-                        </div>
 
-                        <hr class="invis">
+<!--footer start-->
+<footer class="site-footer">
+    <div class="text-center">
+        2023 &copy; Developed by Rutik & Team
+        <a href="" class="go-top">
+            <i class="fa fa-angle-up"></i>
+        </a>
+    </div>
+</footer>
+<!--footer end-->
+</section>
 
-                        <div class="newsletter-widget text-left">
-                            <form class="form-inline">
-                                <input type="text" class="form-control" placeholder="Enter your email address">
-                                <button type="submit" class="btn btn-primary">SUBMIT</button>
+<!-- js placed at the end of the document so the pages load faster -->
+<script src="js/jquery.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script class="include" type="text/javascript" src="js/jquery.dcjqaccordion.2.7.js"></script>
+<script src="js/jquery.scrollTo.min.js"></script>
+<script src="js/jquery.nicescroll.js" type="text/javascript"></script>
+<script src="js/jquery.sparkline.js" type="text/javascript"></script>
+<script src="assets/jquery-easy-pie-chart/jquery.easy-pie-chart.js"></script>
+<script src="js/owl.carousel.js"></script>
+<script src="js/jquery.customSelect.min.js"></script>
+<script src="js/respond.min.js"></script>
 
-                            </form>
-                        </div><!-- end newsletter -->
-                    </div><!-- end footer-text -->
-                </div><!-- end widget -->
-            </div><!-- end col -->
+<!--right slidebar-->
+<script src="js/slidebars.min.js"></script>
+<!--dynamic table initialization -->
+<script type="text/javascript" language="javascript" src="assets/advanced-datatable/media/js/jquery.dataTables.js">
+</script>
+<script type="text/javascript" src="assets/data-tables/DT_bootstrap.js"></script>
+<script src="js/dynamic_table_init.js"></script>
+<!--common script for all pages-->
+<script src="js/common-scripts5e1f.js?v=2"></script>
 
-            <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                <div class="widget">
-                    <h2 class="widget-title">Popular Categories</h2>
-                    <div class="link-widget">
-                        <ul>
-                            <?php
-                            use App\classes\Category;
-                            $popu = Category::showLimitCategory();
-                            while ($cat = mysqli_fetch_assoc($popu)){
-                                ?>
-                                <li><a href="index.php?id=<?= $cat['id']?>&catwisepost"><?= $cat['category_name'] ?> <span><?php echo Category::countCategoryPost($cat['id']);?></span></a></li>
-                            <?php } ?>
-                        </ul>
-                    </div><!-- end link-widget -->
-                </div><!-- end widget -->
-            </div><!-- end col -->
+<!--script for this page-->
+<script src="js/sparkline-chart.js"></script>
+<script src="js/easy-pie-chart.js"></script>
+<script src="js/count.php"></script>
+<!--summernote-->
+<script src="assets/summernote/dist/summernote.min.js"></script>
+<script>
+//owl carousel
 
-            
-        </div>
+$(document).ready(function() {
+    $("#owl-demo").owlCarousel({
+        navigation: true,
+        slideSpeed: 300,
+        paginationSpeed: 400,
+        singleItem: true,
+        autoPlay: true
 
-        <div class="row" >
-            <div class="col-md-12 text-center">
-                <br>
-                <div class="copyright"> <?= $siteData['footer']?> <a href="<?= $data['footerlink']?>"><?= $data['footertxt']?></a>.</div>
-            </div>
-        </div>
-    </div><!-- end container -->
-</footer><!-- end footer -->
+    });
+});
 
-<div class="dmtop">Scroll to Top</div>
+//custom select box
 
-</div><!-- end wrapper -->
+$(function() {
+    $('select.styled').customSelect();
+});
 
-<!-- Core JavaScript
-================================================== -->
-<script src="assets/js/jquery.min.js"></script>
-<script src="assets/js/tether.min.js"></script>
-<script src="assets/js/bootstrap.min.js"></script>
-<script src="assets/js/custom.js"></script>
+$(window).on("resize", function() {
+    var owl = $("#owl-demo").data("owlCarousel");
+    owl.reinit();
+});
+</script>
+<script>
+jQuery(document).ready(function() {
 
+    $('.summernote').summernote({
+        height: 200, // set editor height
+
+        minHeight: null, // set minimum height of editor
+        maxHeight: null, // set maximum height of editor
+
+        focus: true // set focus to editable area after initializing summernote
+    });
+});
+</script>
 </body>
+
 </html>
